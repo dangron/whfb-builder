@@ -4,8 +4,7 @@ class Unit
 {
     public Profile $profile;
     public int $count;
-    public array $options = [];
-    public array $upgrades = [];
+    public array $options = [], $upgrades = [];
 
     public static function of(Profile $profile, int $count): self
     {

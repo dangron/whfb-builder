@@ -41,8 +41,12 @@ test('rosters have costs', function () {
     expect($roster->cost())->toBe(60);
 });
 
-test('statlines exist', function () {
-    $stats = Statline::builder()->m(7)->ws(4)->bs(0)->s(3)->t(3)->w(1)->i(3)->a(1)->ld(5)->build();
-    expect($stats->getStat('bs'))->toBe(0);
-    expect($stats->getStat('m'))->toBe(7);
+test('profiles can have multiple statlines', function () {
+    $marauderStats = ['m' => 4, 'ws' => 4, 'bs' => 3, 's' => 3, 't' => 3, 'w' => 1, 'i' => 4, 'a' => 1, 'Ld' => 7];
+    $marauderChieftainStats = array_merge($marauderStats, ['a' => 2]);
+    $profile = Profile::of('Marauders', 4)
+        ->withStatline('Marauder', $marauderStats)
+        ->withStatline('Chieftain', $marauderChieftainStats);
+    expect($profile->statlines['Marauder']['a'])->toBe(1);
+    expect($profile->statlines['Chieftain']['a'])->toBe(2);
 });
