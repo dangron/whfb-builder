@@ -2,6 +2,7 @@
 
 use App\Profile;
 use App\Roster;
+use App\Statline;
 use App\Unit;
 
 test('units have costs', function () {
@@ -38,4 +39,10 @@ test('rosters have costs', function () {
     $warhoundsUnitB = Unit::of($warhoundsProfile, 5);
     $roster = Roster::of($warhoundsUnitA, $warhoundsUnitB);
     expect($roster->cost())->toBe(60);
+});
+
+test('statlines exist', function () {
+    $stats = Statline::builder()->m(7)->ws(4)->bs(0)->s(3)->t(3)->w(1)->i(3)->a(1)->ld(5)->build();
+    expect($stats->getStat('bs'))->toBe(0);
+    expect($stats->getStat('m'))->toBe(7);
 });
