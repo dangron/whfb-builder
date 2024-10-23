@@ -4,8 +4,8 @@ class Profile
 {
     public string $name;
     public Type $type;
-    public int $ppm;
-    public array $options, $upgrades, $statlines;
+    public int $ppm, $magicItemAllowance = 0;
+    public array $options, $upgrades, $statlines, $magicItemConditions = [];
 
     static function of(string $name, int $ppm, Type $type): self
     {
@@ -35,5 +35,18 @@ class Profile
         $instance = clone $this;
         $instance->statlines[$name] = $statline;
         return $instance;
+    }
+
+    public function withMagicItemAllowance(int $int, array $conditions): self
+    {
+        $instance = clone $this;
+        $instance->magicItemAllowance = $int;
+        $instance->magicItemConditions = $conditions;
+        return $instance;
+    }
+
+    public function allowsMagicItems(): bool
+    {
+        return $this->magicItemAllowance > 0;
     }
 }
