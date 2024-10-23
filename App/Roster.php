@@ -19,8 +19,16 @@ class Roster
         );
     }
 
-    private function filterUnitsByType(Type $type)
+    private function filterUnitsByType(Type $type): array
     {
         return array_filter($this->units, fn(Unit $unit) => $unit->profile->type === $type);
+    }
+
+    public function unitCount(?Type $type = null): int
+    {
+        return array_reduce(
+            $type ? $this->filterUnitsByType($type): $this->units,
+            fn($carry, $unit) => $carry + 1, 0
+        );
     }
 }
