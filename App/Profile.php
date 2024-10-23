@@ -49,4 +49,9 @@ class Profile
     {
         return $this->magicItemAllowance > 0;
     }
+
+    public function rejectsMagicItems(): bool
+    {
+        return !$this->allowsMagicItems();
+    }
 }

@@ -47,20 +47,27 @@ class Unit
 
     public function withMagicItem(string $name, int $cost): self
     {
-        $hasRequiredUpgrade = $this->profile->magicItemConditions['require-upgrade'] ?? false;
-        if ($hasRequiredUpgrade && !$this->hasUpgrade($this->profile->magicItemConditions['require-upgrade'])){
-            throw new InvalidSelectionException;
-        }
-        $magicItemLimit = $this->profile->magicItemConditions['limit'] ?? false;
-        if ($magicItemLimit && $this->countMagicItems() >= $magicItemLimit) {
-            throw new InvalidSelectionException;
-        }
-        if (!$this->profile->allowsMagicItems() || $this->magicItemAllowanceRemaining() < $cost) {
+        if ($this->rejectsMagicItem($name, $cost)) {
             throw new InvalidSelectionException;
         }
         $instance = clone $this;
         $instance->selectedMagicItems = array_merge($instance->selectedMagicItems, [$name => $cost]);
         return $instance;
+    }
+
+    private function rejectsMagicItem(string $name, int $cost): bool
+    {
+        $conditions = $this->profile->magicItemConditions;
+        $requiredUpgrade = $conditions['require-upgrade'] ?? false;
+        $maxItems = $conditions['limit'] ?? false;
+        return match (true) {
+            $this->hasMagicItem($name),
+            $requiredUpgrade && !$this->hasUpgrade($requiredUpgrade),
+            $maxItems && $this->countMagicItems() >= $maxItems,
+            $this->profile->rejectsMagicItems(),
+            $this->magicItemAllowanceRemaining() < $cost => true,
+            default => false,
+        };
     }
 
     private function magicItemAllowanceRemaining(): int
@@ -77,5 +84,10 @@ class Unit
     private function countMagicItems(): int
     {
         return count($this->selectedMagicItems);
+    }
+
+    private function hasMagicItem(string $name): bool
+    {
+        return array_key_exists($name, $this->selectedMagicItems);
     }
 }

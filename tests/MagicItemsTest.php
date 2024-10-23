@@ -18,6 +18,13 @@ test('units can have a magic items according to profile allowance', function () 
     expect($chosen->selectedMagicItems)->toBe(['Sword of Battle' => 25]);
 });
 
+test('magic items are unique', function () use ($chosenProfile) {
+    $chosen = Unit::of($chosenProfile, 10)
+        ->withUpgrades('Champion')
+        ->withMagicItem('Sword of Battle', 25)
+        ->withMagicItem('Sword of Battle', 25);
+})->throws(InvalidSelectionException::class);
+
 test('units cannot have a more magic items than they are allowed', function () use ($chosenProfile) {
     Unit::of($chosenProfile, 10)->withUpgrades('Champion')
         ->withMagicItem('Biting Blade', 5)
