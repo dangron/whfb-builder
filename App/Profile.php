@@ -3,14 +3,16 @@
 class Profile
 {
     public string $name;
+    public Type $type;
     public int $ppm;
     public array $options, $upgrades, $statlines;
 
-    static function of(string $name, int $ppm): self
+    static function of(string $name, int $ppm, Type $type): self
     {
         $instance = new self;
         $instance->name = $name;
         $instance->ppm = $ppm;
+        $instance->type = $type;
         return $instance;
     }
 

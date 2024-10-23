@@ -11,11 +11,16 @@ class Roster
         return $instance;
     }
 
-    function cost(): int
+    function cost(?Type $type = null): int
     {
         return array_reduce(
-            $this->units,
+            $type ? $this->filterUnitsByType($type): $this->units,
             fn($carry, $unit) => $carry + $unit->cost(), 0
         );
+    }
+
+    private function filterUnitsByType(Type $type)
+    {
+        return array_filter($this->units, fn(Unit $unit) => $unit->profile->type === $type);
     }
 }
