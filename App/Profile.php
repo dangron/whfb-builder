@@ -4,7 +4,8 @@ class Profile
 {
     public string $name;
     public Type $type;
-    public int $ppm, $magicItemAllowance = 0;
+    public int $ppm, $minUnitSize = 1, $magicItemAllowance = 0;
+    public ?int $maxUnitSize = null;
     public array $options, $upgrades, $statlines, $magicItemConditions = [];
 
     static function of(string $name, int $ppm, Type $type): self
@@ -14,6 +15,16 @@ class Profile
         $instance->ppm = $ppm;
         $instance->type = $type;
         return $instance;
+    }
+
+    static function hero(string $name, int $ppm): self
+    {
+        return self::of($name, $ppm, Type::Heroes)->withMaxUnitSize(1);
+    }
+
+    static function lord(string $name, int $ppm): self
+    {
+        return self::of($name, $ppm, Type::Lords)->withMaxUnitSize(1);
     }
 
     function withOption(string $name, int $ppm): self
@@ -53,5 +64,19 @@ class Profile
     public function rejectsMagicItems(): bool
     {
         return !$this->allowsMagicItems();
+    }
+
+    public function withMinUnitSize(int $minUnitSize):self
+    {
+        $instance = clone $this;
+        $instance->minUnitSize = $minUnitSize;
+        return $instance;
+    }
+
+    public function withMaxUnitSize(int $maxUnitSize):self
+    {
+        $instance = clone $this;
+        $instance->maxUnitSize = $maxUnitSize;
+        return $instance;
     }
 }

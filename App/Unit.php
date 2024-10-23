@@ -8,11 +8,11 @@ class Unit
     public int $count;
     public array $selectedOptions = [], $selectedUpgrades = [], $selectedMagicItems = [];
 
-    public static function of(Profile $profile, int $count): self
+    public static function of(Profile $profile, ?int $count = null): self
     {
         $instance = new self;
         $instance->profile = $profile;
-        $instance->count = $count;
+        $instance->count = $count ?? $instance->profile->minUnitSize;
         return $instance;
     }
 

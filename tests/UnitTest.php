@@ -32,3 +32,15 @@ test('units can select upgrades for a flat points cost', function () {
     expect($marauderUnit->cost())->toBe(60);
     expect($marauderUnit->selectedUpgrades)->toBe(['Musician', 'Standard Bearer', 'Chieftain']);
 });
+
+test('units can violate unit size constraints', function () {
+    $marauderProfile = Profile::of('Marauders', 4, Type::Core)
+        ->withUpgrade('Musician', 4)
+        ->withUpgrade('Standard Bearer', 8)
+        ->withUpgrade('Chieftain', 8)
+        ->withMinUnitSize(10);
+    $marauderUnit = Unit::of($marauderProfile, 10)
+        ->withUpgrades('Musician', 'Standard Bearer', 'Chieftain');
+    expect($marauderUnit->cost())->toBe(60);
+    expect($marauderUnit->selectedUpgrades)->toBe(['Musician', 'Standard Bearer', 'Chieftain']);
+});
