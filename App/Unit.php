@@ -60,14 +60,11 @@ class Unit
         $conditions = $this->profile->magicItemConditions;
         $requiredUpgrade = $conditions['require-upgrade'] ?? false;
         $maxItems = $conditions['limit'] ?? false;
-        return match (true) {
-            $this->hasMagicItem($name),
-            $requiredUpgrade && !$this->hasUpgrade($requiredUpgrade),
-            $maxItems && $this->countMagicItems() >= $maxItems,
-            $this->profile->rejectsMagicItems(),
-            $this->magicItemAllowanceRemaining() < $cost => true,
-            default => false,
-        };
+        return $this->hasMagicItem($name) ||
+            $this->profile->rejectsMagicItems() ||
+            ($maxItems && $this->countMagicItems() >= $maxItems) ||
+            ($requiredUpgrade && !$this->hasUpgrade($requiredUpgrade)) ||
+            $this->magicItemAllowanceRemaining() < $cost;
     }
 
     private function magicItemAllowanceRemaining(): int
