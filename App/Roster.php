@@ -15,20 +15,28 @@ class Roster
     {
         return array_reduce(
             $type ? $this->filterUnitsByType($type): $this->units,
-            fn($carry, $unit) => $carry + $unit->cost(), 0
+            fn($carry, Unit $unit) => $carry + $unit->cost(), 0
         );
-    }
-
-    private function filterUnitsByType(Type $type): array
-    {
-        return array_filter($this->units, fn(Unit $unit) => $unit->profile->type === $type);
     }
 
     public function unitCount(?Type $type = null): int
     {
         return array_reduce(
             $type ? $this->filterUnitsByType($type): $this->units,
-            fn($carry, $unit) => $carry + 1, 0
+            fn($carry, Unit $unit) => $carry + 1, 0
         );
+    }
+
+    public function modelCount(?Type $type = null): int
+    {
+        return array_reduce(
+            $type ? $this->filterUnitsByType($type): $this->units,
+            fn($carry, Unit $unit) => $carry + $unit->count, 0
+        );
+    }
+
+    private function filterUnitsByType(Type $type): array
+    {
+        return array_filter($this->units, fn(Unit $unit) => $unit->profile->type === $type);
     }
 }

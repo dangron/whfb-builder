@@ -78,3 +78,17 @@ test('rosters count units by their type', function () {
     expect($roster->unitCount(Type::Core))->toBe(2);
     expect($roster->unitCount(Type::Special))->toBe(0);
 });
+
+test('rosters count models by their type', function () {
+    $lordsProfile = Profile::of('Chaos Lord', 210, Type::Lords);
+    $warhoundsProfile = Profile::of('Warhounds', 6, Type::Core);
+    $roster = Roster::of(
+        Unit::of($lordsProfile, 1),
+        Unit::of($warhoundsProfile, 5),
+        Unit::of($warhoundsProfile, 10)
+    );
+    expect($roster->modelCount())->toBe(16);
+    expect($roster->modelCount(Type::Lords))->toBe(1);
+    expect($roster->modelCount(Type::Core))->toBe(15);
+    expect($roster->modelCount(Type::Special))->toBe(0);
+});
