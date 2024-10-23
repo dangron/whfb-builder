@@ -3,7 +3,7 @@
 class Roster
 {
     private array $units;
-    private ?int $pointsLimit;
+    private ?int $pointsLimit = null;
 
     static function of(Unit ...$units): self
     {

@@ -40,3 +40,12 @@ test('rosters can have a points limit', function () {
     $roster->addUnit(Unit::of(Profile::lord('Chaos Lord', 210)));
     expect($roster->pointsLeft())->toBe(2000 - 210);
 });
+
+test('rosters can exceed their points limit', function () {
+    $units = array_fill(0, 10, Unit::of(Profile::lord('Chaos Lord', 210)));
+    $roster = Roster::of(...$units);
+    expect($roster->pointsLeft())->toBe(null);
+    $roster->setPointsLimit(2000);
+    expect($roster->pointsLeft())->toBe(-100);
+    expect($roster->cost())->toBe(2100);
+});
