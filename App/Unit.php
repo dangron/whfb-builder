@@ -4,7 +4,7 @@ class Unit
 {
     public Profile $profile;
     public int $count;
-    public array $options = [], $upgrades = [];
+    public array $selectedOptions = [], $selectedUpgrades = [];
 
     public static function of(Profile $profile, int $count): self
     {
@@ -18,11 +18,11 @@ class Unit
     {
         $baseCost = $this->profile->ppm * $this->count;
         $optionsCost = 0;
-        foreach ($this->options as $selectedOption) {
+        foreach ($this->selectedOptions as $selectedOption) {
             $optionsCost += $this->profile->options[$selectedOption] * $this->count;
         }
         $upgradesCost = 0;
-        foreach ($this->upgrades as $selectedUpgrade) {
+        foreach ($this->selectedUpgrades as $selectedUpgrade) {
             $upgradesCost += $this->profile->upgrades[$selectedUpgrade];
         }
         return $baseCost + $optionsCost + $upgradesCost;
@@ -31,14 +31,14 @@ class Unit
     public function withOptions(string ...$names): self
     {
         $instance = clone $this;
-        $instance->options = array_merge($instance->options, $names);
+        $instance->selectedOptions = array_merge($instance->selectedOptions, $names);
         return $instance;
     }
 
     public function withUpgrades(string ...$names): self
     {
         $instance = clone $this;
-        $instance->upgrades = array_merge($instance->upgrades, $names);
+        $instance->selectedUpgrades = array_merge($instance->selectedUpgrades, $names);
         return $instance;
     }
 }

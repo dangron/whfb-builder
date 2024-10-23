@@ -1,6 +1,4 @@
-<?php
-
-namespace App;
+<?php namespace App;
 
 enum Type: string
 {
